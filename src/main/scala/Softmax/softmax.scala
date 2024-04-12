@@ -3,6 +3,7 @@ package softmax
 import chisel3._
 import chisel3.util._
 import chisel3.stage._
+import scala.io.Source
 
 import define.MACRO._
 
@@ -36,4 +37,26 @@ class SEFP_GeneratorUnit(bitwidth: Int) extends Module {
     })
 
 
+}
+
+class ExpLookup(index_width:Int,mantissa_width:Int,exp_result_width:Int)extends Module {
+  val io = IO(new Bundle {
+    val index = Input(UInt(index_width.W))    // 5位指数输入
+    val mantissa = Input(UInt(mantissa_width.W)) // 10位尾数输入
+    val result = Output(UInt(exp_result_width.W))  // 16位浮点数输出
+  })
+
+  // 读取文件并解析十六进制字符串
+  val filename = "/home/zzp/zzp/ml-accelerator/tool/fp16_exp_lut.chisel"
+  val fileLines = Source.fromFile(filename).getLines().toArray
+  val expTable = fileLines.map(line => Integer.parseInt(line.trim, 16).U(exp_result_width.W))
+
+  // 将解析后的数组转换为 Vec
+  val expTableVec = VecInit(expTable)
+
+  // 计算查表索引
+  val tableIndex = io.index * (1.U << mantissa_width) + io.mantissa // index * 2^mantissa_width + mantissa
+
+  // 查表操作，输出对应的 fp16 结果
+  io.result := expTableVec(tableIndex)
 }

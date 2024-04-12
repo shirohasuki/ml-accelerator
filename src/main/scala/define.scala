@@ -15,6 +15,10 @@ object MACRO {
     val exp_bitwidth        = 5
     val frac_bitwidth       = 10
 
+    val index_width         = 5
+    val mantissa_width      = 10
+    val exp_result_width    = 16
+
 
     // ITA 
     val numElements         = datain_bandwidth
