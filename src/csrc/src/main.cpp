@@ -55,20 +55,35 @@ void sim_exit() {
 //     } // pc先走拍到第一条指令执行结束
 // }
 
-extern uint8_t softmax_output[16][16];
-extern uint8_t softmax_input[16][16];
-extern double softmax_ref[16][16];
+
+extern float softmax_input_float[5][5];
+extern fp16_t softmax_input_fp16[5][5];
+
 //================ main =====================//
 int main(int argc, char *argv[]) {
     sim_init();
 
     init_monitor(argc, argv);
 
+    display_float_matrix(softmax_input_float, 5, 5);
+
+    for (int j = 0; j < 5; j++) {
+        for (int k = 0; k < 5; k ++) {
+            softmax_input_fp16[j][k] = float_to_fp16(softmax_input_float[j][k]);
+        }
+    }
+    
+    display_fp16_matrix(softmax_input_fp16, 5, 5);
+
+    share_exp(softmax_input_fp16, softmax_input_fp16);
+
+    display_fp16_matrix(softmax_input_fp16, 5, 5);
+
     sdb_mainloop();
 
     sim_exit();
 
-    softmax(softmax_input); 
+    // softmax(softmax_input); 
 
-    display_result(softmax_output, softmax_ref);
+    // display_result(softmax_output, softmax_ref);
 } 

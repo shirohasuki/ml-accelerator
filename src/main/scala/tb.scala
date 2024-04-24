@@ -10,8 +10,8 @@ import define.MACRO._
 
 
 class tb extends Module {
-    val softmax = Module(new softmax)
-    
+  //  val softmax = Module(new softmax)
+      val explut  = Module(new  ExpLookup(index_width=5,mantissa_width=10,exp_result_width=16))
 }
 
 

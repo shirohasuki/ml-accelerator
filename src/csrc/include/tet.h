@@ -10,6 +10,12 @@
 #include "verilated_vcd_c.h"
 #include "Vtb.h"
 
+
+// ================ DataType ====================
+#include <input/input.h>
+#include <utils/display.h>
+
+
 // ================ RISCV CPU ===================
 
 // ================ SDB Config ===================
@@ -18,9 +24,10 @@ void sdb_mainloop();
 void tet_exec_once();
 void sdb_set_batch_mode(); 
 
-// ================ SoftMax ===================
+// ================ Ref ===================
 // extern uint8_t softmax_input[16][16];
 void display_result(uint8_t (*dut_matrix)[16], double (*ref_matrix)[16]);
+void share_exp(fp16_t (*matrix_in)[5], fp16_t (*matrix_out)[5]);
 void softmax(uint8_t (*softmax_matrix)[16]);
 
 
